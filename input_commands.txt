@@ -1,0 +1,41 @@
+!************************************************************************
+! List of input commands for AMBER and processing codes
+! Written by C. Miller, last updated 6/1/17
+!
+! Note: the only command that must be modified by the user is the command that sets AMBERHOME
+! If it’s not already defined in your system, change PATH_TO_AMBER to the correct path
+! The remaining commands can be copied and pasted into the terminal window as-is
+!************************************************************************
+
+!************************************************************************
+! AMBER INPUT COMMANDS
+!************************************************************************
+
+export AMBERHOME=PATH_TO_AMBER/amber12
+
+$AMBERHOME/bin/xleap -s -f $AMBERHOME/dat/leap/cmd/leaprc.ff99SB
+
+$AMBERHOME/bin/sander -O -i 1_min.in -o wat_min.out -p wat.prmtop -c wat.inpcrd -r wat_min.rst
+
+$AMBERHOME/bin/sander -O -i 2_defrost.in -o wat_defrost.out -p wat.prmtop -c wat_min.rst -r wat_defrost.rst
+
+$AMBERHOME/bin/sander -O -i 3_equil.in -o wat_equil.out -p wat.prmtop -c wat_defrost.rst -r wat_equil.rst
+
+$AMBERHOME/bin/sander -O -i 4_md.in -o wat_md.out -p wat.prmtop -c wat_equil.rst -r wat_md.rst -x water.mdcrd
+
+$AMBERHOME/bin/ambpdb -p wat.prmtop < wat_equil.rst > wat_equil.pdb
+
+!************************************************************************
+! POST-PROCESSING INPUT COMMANDS
+! The first command compiles the Fortran code (do once)
+! After the code is compiled, it can be run as needed with the ./name command
+!************************************************************************
+
+gfortran parse_mdxyz.f90 -o parse_mdxyz
+./parse_mdxyz
+
+gfortran diffusion.f90 -o diffusion
+./diffusion
+
+gfortran grOO.f90 -o grOO 
+./grOO

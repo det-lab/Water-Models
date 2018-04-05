@@ -1,0 +1,17 @@
+Step 2: Heat system from 0 K to target temperature. IMPORTANT: Change temp0 before running! Simulation time: 20 ps
+ &cntrl
+  imin   = 0,
+  irest  = 0,
+  ntx    = 1,
+  ntb    = 1,
+  cut    = 9.287,
+  ntc    = 2,
+  ntf    = 2,
+  tempi  = 0.0,
+  temp0  = 300.0,
+  ntt    = 3,
+  gamma_ln = 1.0,
+  nstlim = 10000, dt = 0.002,
+  ntpr = 100, ntwx = 0, ntwr = 1000
+ /
+ 

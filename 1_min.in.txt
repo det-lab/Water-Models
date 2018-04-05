@@ -1,0 +1,8 @@
+Step 1: Minimization of the energy of the system
+ &cntrl
+  imin   = 1,
+  maxcyc = 4000,
+  ncyc   = 1000,
+  ntb    = 1,
+  cut    = 9.287
+ /
