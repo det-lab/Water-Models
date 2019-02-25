@@ -1,0 +1,4 @@
+parm wat_MODEL.prmtop  #loads topology file
+trajin water_MODEL.mdcrd #loads coordinates for each water molecule
+rms Topfirst !@H= first out diff_MODEL.agr #calculates the RMSD (root mean sqare distance) of the trajectory of each oxygen
+run #runs previous calculations and creates diff_MODEL.agr file 
