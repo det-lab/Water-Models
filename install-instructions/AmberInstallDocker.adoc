@@ -1,3 +1,8 @@
+// global variables for admonition icons 
+
+:important-caption: pass:[<span style="font-size: em">important ❗</span]
+:note-caption: pass:[<span style="font-size: em">note ✏️</span]
+
 = Installing Amber18 with Docker
 Dylan Torres <dylan.l.torres@ucdenver.edu>  
 
@@ -26,6 +31,7 @@ A Docker image is a file that contains instructions for your computer to install
 A Docker container is where the application actually runs. The container contains the Docker image, the files for the application you wish to run and the Linux operating system. 
 
 [IMPORTANT]
+
 .Docker System Requirements
 ====
 
@@ -100,3 +106,5 @@ NOTE: There should now be a directory named Amberdocker.
 * Via the VNC application: 127.0.0.1:5901
 
 * Via the web: http://127.0.0.1:6901/vnc.html
+
+
