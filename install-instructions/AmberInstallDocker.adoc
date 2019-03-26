@@ -1,7 +1,8 @@
 // global variables for admonition icons 
 
-:important-caption: pass:[<span style="font-size: em">important ❗</span]
-:note-caption: pass:[<span style="font-size: em">note ✏️</span]
+:important-caption: pass:[<span style="font-size: em">IMPORTANT ❗</span]
+
+:note-caption: pass:[<span style="font-size: em">NOTE ✏️</span]
 
 = Installing Amber18 with Docker
 Dylan Torres <dylan.l.torres@ucdenver.edu>  
@@ -18,9 +19,9 @@ Amber is a set of Linux-based programs that simulate how particles and molecules
 
 
 == What is Docker?
+Docker is a tool that simplifies the installation and running of Linux-based applications across different operating systems.
 
-Docker is a tool that simplifies installing and running Linux-based applications on different operating systems.
-Rather than running Amber on your computer's operating system, a Docker *image* will build a Docker *container* so that Amber will run separately from your computer's operating system.
+Rather than running Amber on your computer's operating system, Docker builds an *image* which allows you to operate Linux in a *container*, allowing Amber to run separately from your computer's operating system.
 
 === Docker Images
 
