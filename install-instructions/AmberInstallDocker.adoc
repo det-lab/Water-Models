@@ -9,19 +9,20 @@ Dylan Torres <dylan.l.torres@ucdenver.edu>
 
 Most applications and software downloaded from the web require just a few clicks of a mouse to be successfully installed on a computer. Amber, a Linux-based application, is not so simple.
 
-Difficulties of the installation process are heightened for Mac and Windows users, requiring the use of integrated development environments and programs that translate source code into machine readable code called compilers. 
+Difficulties of the installation process are heightened for Mac and Windows users, requiring the use of integrated development environments and programs that translate source code into machine readable code called compilers. #This makes it sound like only Mac and Windows users need to compile the code - but you have to compile the code on linux, too. [AR]#
 
-From these instructions, you will learn a simpler and faster way of installing Amber on your Mac or PC with the use of a tool called Docker. 
+From these instructions, you will learn a simpler and faster way of installing Amber on your Mac or PC #So I'm not sure we should recommend people with Windows 10 to install amber like this.  Jonathan, your thoughts here would be helpful.  Do you think this method would be less painful than the WSL+X? [AR]# with the use of a tool called Docker. 
 
 == What is Amber, exactly?
 
-Amber is a set of Linux-based programs that simulate how particles and molecules interact and behave. Amber is offered in two parts: AmberTools18 and Amber18. By the end of this document, you will (hopefully) have both  parts installed and running on your computer. 
+Amber is a set of Linux-based programs that simulate how particles and molecules interact and behave. [red]#Amber is offered in two parts: AmberTools18 and Amber18#.  #To use Amber you will need to install two sets of programs, AmberTools18 and Amber18. [maybe? AR]# By the end of this document, you will (hopefully) have both  parts installed and running on your computer. 
 
 
 == What is Docker?
 Docker is a tool that simplifies the installation and running of Linux-based applications across different operating systems.
 
 Rather than running Amber on your computer's operating system, Docker builds an *image* which allows you to operate Linux in a *container*, allowing Amber to run separately from your computer's operating system.
+// This explanation is *awesome*
 
 === Docker Images
 
@@ -41,7 +42,7 @@ Mac:
  . Mac hardware must be a 2010 or new model.
  . macOS Sierra 10.12 and new releases are supported (new versions recommended).
  . Must have at least 5 GB of RAM
- . If VirtualBox is installed on yor computer, the version must be LATER than version 4.3.30
+ . If VirtualBox is installed on yor computer, the version must be LATER than version 4.3.30 #Is VirtualBox required or used?  Or will just having it installed cause issues? [AR]#
 ====
 
 
@@ -49,7 +50,7 @@ Mac:
 == Installation Instructions: AmberTools18 and Amber18
 
 === Requirements 
-. gitHub account
+. gitHub account #I don't think a github account is actually required unless you want to contribute back to the project, could we test this? [AR]#
 . Docker 
 . AmberTools18 andAmber18 source code
 . VNC Viewer
@@ -61,25 +62,28 @@ To create a gitHub account, click https://github.com[here].
 Download Docker from https://hub.docker.com/editions/community/docker-ce-desktop-mac[here]. Follow the download and installation instructions.
 
 ==== Download Amber 
-. Download AmberTools18 and Amber18 from your source.
+. Download AmberTools18 #from ???.  To download Amber18 you will need to purchase a license from ??? and you will be sent instructions for download [AR]# [line-through]#from your source#.
 
 ==== Download a Virtual Newtork Computing (VNC) viewer
-The Docker container taps into a nework host that contains Linux. The VNC transmits the graphics from the host pixel by pixel, displaying a Linux graphical user interface (GUI) in the container just as your operating system displays a (GUI) on your monitor. 
+The Docker container taps into a nework host that contains Linux #I don't quite understand this sentence [AR]#. The VNC transmits the graphics from the host pixel by pixel, displaying a Linux graphical user interface (GUI) in the container just as your operating system displays a (GUI) on your monitor. 
 
 . Download RealVNC from https://www.realvnc.com/en/connect/download/viewer/[here] but DO NOT install.
-. Rename the file to vmd-1.9.3.tar.gz .
+. Rename the file to vmd-1.9.3.tar.gz #How does it get into the Applications folder? [AR]  Oooh never mind I see, this is for the linux container? [AR]#.
 
 
 === Build the Amber Docker image
+#Adding shell commands for each of these steps would be helpful.  Also, I'd recommend including the prompt in the commands, it's another thing people can check to make sure they're doing the right thing [AR]#
+
 //- 
 . In the terminal, move to the directory in which you would like to build the container.
 . Clone the Amber Docker Files from gitHub.
 +
+```sh
  git clone https://github.com/yylonly/AmberDocker.git    
- 
+```
 +
-NOTE: There should now be a directory named Amberdocker.
-. Move the AmberTools18, Amber18 and VNC viewer files to the Amberdocker directory.
+NOTE: There should now be a directory named AmberDocker.
+. Move the AmberTools18, Amber18 and VNC viewer files to the AmberDocker directory.
 . Build the Docker image (expect about an hour of wait time). 
 + 
  docker build . -t amber18:cpu
@@ -87,7 +91,9 @@ NOTE: There should now be a directory named Amberdocker.
 
 
 === Run the Docker Container
-. Get the path of the Amberdocker directory in the terimal.
+#I'd suggest putting the linux commands in their shell environment: include the prompt and the output.  Maybe? [AR]#
+
+. Get the path of the AmberDocker directory in the terminal.
 +
  pwd
 +
@@ -100,7 +106,7 @@ NOTE: There should now be a directory named Amberdocker.
 === Connect to Container
 . Open the VNC viewer.
 + 
-* For Macs this should be in your applications folder. 
+* For Macs this should be in your applications folder. #Do we need to instruct people to install VNC as well as downloading the zip file for the docker image? [AR]#
 +
 . Access the container (password: `vncpassword`).
 +
