@@ -26,8 +26,7 @@ http://ambermd.org[Amber Moleclar Dynamics] package can perform
 simulations at the http://ambermd.org/2012_wires.pdf[atomic level], on timescales from femtoseconds to milliseconds! Since its creation in the late 1970s, Amber has gone from using just two languages (Fortran and C) to using Python, Cuda and Pearl with over 850,000 lines of code.This growth forced developers to divide the package into two platforms with the current versions being: *AmberTools18* and *Amber18*.
 
 === Download the Amber Package
-If you already have Amber downloaded, skip to 
-Download the following to an easily accesible location,we'll need them later!
+Download the following to an easily accesible location such as your desktop - we'll need them later!
 
 ==== AmberTools18 (Open Source)
 Download http://ambermd.org/GetAmber.php#ambertools[AmberTools18]. The recommended download method is *Option 1: Getting the Source Code*. 
@@ -41,9 +40,9 @@ After purchasing a license (or obtaining one from school/work) for http://amberm
 [NOTE]
 .File Extensions
 ====
-*Tape ARchive (TAR)* files store multiple files in one and are primarily used to archive in Linux/Unix systems. 
+`.tar` files store multiple files in one and are primarily used to archive in Linux/Unix systems. 
 
-*bzip2 (BZ2)* are used to compress TAR files (and others) for quick and easy software distribution. 
+`.bz2` files are used to compress TAR files (and others) for quick and easy software distribution. 
 ====
 ****
 
@@ -86,7 +85,7 @@ Follow these instrunctions to install and run Docker Desktop.
 [NOTE]
 .File Extensions
 ====
-*DMG* files or, Apple Disk Image Files, are typically used to compress software installers. DMGs are "mounted" as drives and treated by the OS as if they are physical hard drives, making it easy to view their content and install. 
+`.dmg` files or, Apple Disk Image Files, are typically used to compress software installers. DMGs are "mounted" as drives and treated by the OS as if they are physical hard drives, making it easy to view their content and install. 
 ====
 ****
 
