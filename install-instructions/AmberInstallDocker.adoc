@@ -1,111 +1,375 @@
 // global variables for admonition icons 
+:tip-caption: pass:[<span style="font-size: em">TIP 💡</span]
+:note-caption: pass:[<span style="font-size: em">  NOTE ✏️ </span]
+:important-caption: pass:[<span style="font-size: em"> IMPORTANT ❗ </span]
 
-:important-caption: pass:[<span style="font-size: em">IMPORTANT ❗</span]
+// document Title 
+= Containers: Accessing Molecular Dynamics Software on Your Mac
+:toc:
+Dylan Torres <dylan.l.torres@ucdenver.edu>
 
-:note-caption: pass:[<span style="font-size: em">NOTE ✏️</span]
+== Research and Command-Line-Coding
 
-= Installing Amber18 with Docker
-Dylan Torres <dylan.l.torres@ucdenver.edu>  
+Conducting applied research in any of the physical sciences is an awesome opportunity - you get to be on the cutting edge of your field! 
 
-Most applications and software downloaded from the web require just a few clicks of a mouse to be successfully installed on a computer. Amber, a Linux-based application, is not so simple.
+But before you can perform any insightful or meaningful work, you'll have to overcome the challenges of working with command-line interfaces. 
 
-Difficulties of the installation process are heightened for Mac and Windows users, requiring the use of integrated development environments and programs that translate source code into machine readable code called compilers. 
+Much of the software required to perform computational analysis requires an insane amount of work just to install and run the program - especially if the software was written for a different operating sytem. 
 
-From these instructions, you will learn a simpler and faster way of installing Amber on your Mac or PC with the use of a tool called Docker. 
+Fortuantely, developments such as Docker made such applications and software more accessible. By the end of this, you will learn how to install a molecular dynamics package called *Amber* on your *Mac* with the use of the *Docker infrastructure*. 
 
-== What is Amber, exactly?
+TIP: If you have little to no experience using the Unix Shell, check out this http://swcarpentry.github.io/shell-novice/[tutorial].   
 
-Amber is a set of Linux-based programs that simulate how particles and molecules interact and behave. Amber is offered in two parts: AmberTools18 and Amber18. By the end of this document, you will (hopefully) have both  parts installed and running on your computer. 
+== Molecular Dynamics: Amber
 
+http://ambermd.org[Amber Moleclar Dynamics] package can perform 
+simulations at the http://ambermd.org/2012_wires.pdf[atomic level], on timescales from femtoseconds to milliseconds! Since its creation in the late 1970s, Amber has gone from using just two languages (Fortran and C) to using Python, Cuda and Pearl with over 850,000 lines of code.This growth forced developers to divide the package into two platforms with the current versions being: *AmberTools18* and *Amber18*.
 
-== What is Docker?
-Docker is a tool that simplifies the installation and running of Linux-based applications across different operating systems.
+=== Download the Amber Package
+If you already have Amber downloaded, skip to 
+Download the following to an easily accesible location,we'll need them later!
 
-Rather than running Amber on your computer's operating system, Docker builds an *image* which allows you to operate Linux in a *container*, allowing Amber to run separately from your computer's operating system.
+==== AmberTools18 (Open Source)
+Download http://ambermd.org/GetAmber.php#ambertools[AmberTools18]. The recommended download method is *Option 1: Getting the Source Code*. 
+Fill out the required fields to get the `AmberTools18.tar.bz2`. 
+// image
 
-=== Docker Images
+==== Amber18 Source Code (License Required)
+After purchasing a license (or obtaining one from school/work) for http://ambermd.org/GetAmber.php#ambertools[Amber18], follow the `Amber18.tar.bz2` download instructions sent to you. 
 
-A Docker image is a file that contains instructions for your computer to install and run applications in a container. 
-
-=== Docker Containers
-
-A Docker container is where the application actually runs. The container contains the Docker image, the files for the application you wish to run and the Linux operating system. 
-
-[IMPORTANT]
-
-.Docker System Requirements
+****
+[NOTE]
+.File Extensions
 ====
+*Tape ARchive (TAR)* files store multiple files in one and are primarily used to archive in Linux/Unix systems. 
 
-Mac: 
+*bzip2 (BZ2)* are used to compress TAR files (and others) for quick and easy software distribution. 
+====
+****
 
- . Mac hardware must be a 2010 or new model.
+== Docker
+
+image::https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png[100]
+
+Docker uses a client-server architecture to ship, build and run appplications in _containers_. 
+
+=== Docker Desktop for Mac
+
+Before you can run Amber in a Docker container, you have to install the Docker software. It is recommended that you install *Docker Desktop*, the newest version of Docker. 
+
+****
+*Docker Desktop System Requirements for Mac*
+====
+. Mac hardware must be a 2010 or new model. You can check to see if your machine is supported by entering the following input and receving the following output in the Terminal:
++
+```sh
+$ sysctl kern.hv_support
+kern.hv_support: 1
+```
  . macOS Sierra 10.12 and new releases are supported (new versions recommended).
- . Must have at least 5 GB of RAM
- . If VirtualBox is installed on yor computer, the version must be LATER than version 4.3.30
+ . Must have at least 4 GB of RAM
+ . VirtualBox software is *NOT* required to run Docker Desktop. However, if it is installed on your computer, the version must be LATER than version 4.3.30.
+====
+====
+NOTE: If your system does not satisfy these requirements, you can download https://docs.docker.com/toolbox/overview/[Docker Toolbox]. *Docker Toolbox* is an installer for older Mac and Windows systems that lacks the full capability of *Docker Desktop*. Successful installation of Amber  with Docker Toolbox cannot be guaranteed.
+====
+****
+
+=== Install and Run Docker Desktop for Mac
+Follow these instrunctions to install and run Docker Desktop. 
+
+. Download the https://download.docker.com/mac/stable/Docker.dmg[Docker dmg file].
+. Double-click `Docker.dmg` to open the installer, then drag the whale to the Applications folder.
+// insert image
++
+****
+[NOTE]
+.File Extensions
+====
+*DMG* files or, Apple Disk Image Files, are typically used to compress software installers. DMGs are "mounted" as drives and treated by the OS as if they are physical hard drives, making it easy to view their content and install. 
+====
+****
+
+. Double-click Docker.app in the Applications folder to start Docker. (In the example below, the Applications folder is in “grid” view mode.)
+// insert image
+. Authorize `Docker.app` with your system password after Docker is launched.
+
+
+=== Getting Familiar with Docker
+
+====
+NOTE: You can always compare your version of Docker to the latest version by looking at https://docs.docker.com/docker-for-mac/release-notes/[Docker release notes]. 
+====
+Now that Docker is up  and running, verify that your version of Docker is up to date. Enter the following command in the Terminal:
+```sh
+  $ docker --version
+```
+You should receive an output similar to this: 
+
+```sh
+  Client: Docker Engine - Community
+   Version:           18.09.2
+   API version:       1.39
+   Go version:        go1.10.8
+   Git commit:        6247962
+   Built:             Sun Feb 10 04:12:39 2019
+   OS/Arch:           darwin/amd64
+   Experimental:      false
+
+ Server: Docker Engine - Community
+  Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+```
+
+As mentioned, Docker uses *client-server* infrstructure.
+
+The command `docker` allows you to call on the *docker client*. The Docker client docker client communicates with the *engine* of the Docker platform - also known as the *Docker damien*.   
+
+In multitasking computer operating systems a daemon runs as a background process rather than under direct control of an interactive user. 
+
+Fun Fact: the word daemon comes from ancient Greek belief of a supernatural being that lives in the background with with no particular bias toward good or evil. 
+
+=== The Docker Command Line
+
+====
+NOTE: The required syntax for executing any Docker command is `docker [OPTIONS] COMMAND [ARG...]`.
 ====
 
+Everytime you use Docker, you have to call on the Docker client. You can't run Docker without it! 
+
+****
+You'll mostly use the Docker client to:
+====
+. Build Images: `docker build`
+. Run Containers: `docker run`
+. Setup networking for containers
+. Manage disk volumes for the container   
+====
+****
+
+In the Terminal, run `docker` and you'll get a list 
+of available *commands*, *options* and descriptions on how to use them.  
+
+```sh 
+$ docker
+Usage: docker [OPTIONS] COMMAND [ARG...]
+       docker [ --help | -v | --version ]
+
+A self-sufficient runtime for containers.
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+      --help               Print usage
+  -H, --host value         Daemon socket(s) to connect to (default [])
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Commands:
+    attach    Attach to a running container
+    # […]
+```
+
+== Building Your Docker Image 
+
+A Docker *container image* (simply referred to as an _image_) is a lightweight, standalone, executable package of sotware that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. 
+
+First, we need to download the necessary files to build the  image:
+
+```sh
+$ git clone https://github.com/yylonly/AmberDocker.git
+```
+
+Now, use `ls` to list the files in your current directory. You should find a new directory named `AmberDocker`. Change to that directory with `cd`.
+
+```sh 
+$ ls
+AmberDocker
+$ cd AmberDocker
+AmberDocker $
+```
+
+Another `ls` will reveal several files:
+```sh
+$ ls
+README.md	 Dockerfile		src     	
+```
+
+****
+[NOTE]
+.File Extensions
+====
+The file `README.md` contains instructions for you, the user on how to ensure the image is properly built. `.md` indicates it was written using a text editor called MarkDown. 
 
 
-== Installation Instructions: AmberTools18 and Amber18
+The `Dockerfile` contains the instructions for the Docker daemon to build the image. 
 
-=== Requirements 
-. gitHub account
-. Docker 
-. AmberTools18 andAmber18 source code
-. VNC Viewer
+`src` is a type of directory used in Unix OS that contain source code. 
+====
+****
 
-==== Create a gitHub Account
-To create a gitHub account, click https://github.com[here]. 
+Now, let's open up that `README.md` file:
 
-==== Download and install Docker 
-Download Docker from https://hub.docker.com/editions/community/docker-ce-desktop-mac[here]. Follow the download and installation instructions.
+```sh
+$ open README.md
+```
 
-==== Download Amber 
-. Download AmberTools18 and Amber18 from your source.
+****
+NOTE: You'll need a text editor to view a `.md` file. You can also view it https://github.com/yylonly/AmberDocker/blob/master/README.md[here]. However, as you become more experienced, you'll benefit from having a text editor like https://code.visualstudio.comhttps://code.visualstudio.com[Visual Studio Code].
+****
 
-==== Download a Virtual Newtork Computing (VNC) viewer
-The Docker container taps into a nework host that contains Linux. The VNC transmits the graphics from the host pixel by pixel, displaying a Linux graphical user interface (GUI) in the container just as your operating system displays a (GUI) on your monitor. 
+After opening `README.md`, you can see that we already have most of what we need to build our image. All that's left is to download https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.3/[VMD-1.9.3(linux-OpenGL Version)].
 
-. Download RealVNC from https://www.realvnc.com/en/connect/download/viewer/[here] but DO NOT install.
-. Rename the file to vmd-1.9.3.tar.gz .
+After downloading, rename the file to `vmd-1.9.3.tar.gz`.
+
+Okay, now move the following files to the AmberDocker directory:
+
+* `AmberTools18.tar.bz2`
+* `Amber18.tar.bz2` 
+* `vmd-1.9.3.tar.gz`
+
+into the  `/AmberDocker` directory and rename it `vmd-1.9.3-tar.gz`.
+
+FINALLY, it's time to *build the image*! In the AmberDocker directory:
+
+```sh
+$ docker build . -t amber18:cpu
+```
+
+****
+[NOTE]
+.Docker Build Command: Build an Image
+====
+```sh
+docker build [OPTIONS] PATH | URL | -
+```
+we used `.`  as the `[PATH]` to build the image in the current `/AmberDocker` directory
+
+`-t` or `--tag list` is an `[OPTION]` that we used to name the container `amber18:cpu`
+====
+****
+
+Once the image is built, we can search for it by the tag name. 
+
+This process takes about an hour while the Docker client connects to the Docker Daemon to build our image. 
 
 
-=== Build the Amber Docker image
-//- 
-. In the terminal, move to the directory in which you would like to build the container.
-. Clone the Amber Docker Files from gitHub.
-+
- git clone https://github.com/yylonly/AmberDocker.git    
- 
-+
-NOTE: There should now be a directory named Amberdocker.
-. Move the AmberTools18, Amber18 and VNC viewer files to the Amberdocker directory.
-. Build the Docker image (expect about an hour of wait time). 
-+ 
- docker build . -t amber18:cpu
-+
+
+== Running Your Docker Container
+
+A Docker *container* runs an application by packaging all the code and dependencies packaged up neatly so the application runs quickly and reliably. 
+
+It doesn't matter that Amber wasn't written specifically for macOS because the way we have things set up, Amber will run using an operating system within the container! This works by tapping into the network hosted by the Docker daemon.
 
 
-=== Run the Docker Container
-. Get the path of the Amberdocker directory in the terimal.
-+
- pwd
-+
-. Run the Docker container with the path from the previous step in place of {SharedFolder}.
-+
- docker run --rm -p 5901:5901 -p 6901:6901 -v {SharedFolder}:/data --user 0 amber18:cpu
-+
+
+==== Docker Images Become Containers
+To run our image in a countainer, we need to use the `docker run` command. But first, let's check out that `README.md` document again.
+
+According to the instructions, we need to download and install an application called https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.19.325-MacOSX-x86_64.dmg[VNC Viewer]. This will provide us with an https://en.wikipedia.org/wiki/Ubuntu[Ubuntu] graphical user interface (GUI) to interact with the container. 
+
+The time has finally come.... let's run our container! In the `/AmberDocker` directory:
+```sh
+$ docker run --rm -p 5901:5901 -p 6901:6901 -v $(pwd):/data --user 0 amber18:cpu
+```
 
 
-=== Connect to Container
+****
+[NOTE]
+.Docker Run Command: Run an Image in a Container
+====
+```sh
+docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+```
+
+`-rm` Automatically removes the container after it is exited. 
+
+`-p` Pubishes all ports to random ports
+
+`-v` Mounts volumes from the specified container
+
+`--user` User namespace to use
+====
+****
+
+
+Open a new terminal window and enter the `ps` (process status) command. This shows containers that are currently running:
+```sh
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+c2598f1332ab        amber18:cpu         "/dockerstartup/vnc_…"   10 seconds ago      Up 8 seconds        5901/tcp, 6901/tcp   eloquent_nobel
+```
+
+notice the output:
+
+`CONTAINER ID`: an alphanumeric sequence assigned to the container
+
+`IMAGE`: the tag we assigned to the image
+
+This is great, to run the container from now on, all we have to type is:
+
+```sh
+$ docker run amber18:cpu
+```
+
+To stop the container:
+```sh
+$ docker stop [CONTAINER ID]
+```
+
+==== Connect to the Container
+
 . Open the VNC viewer.
 + 
-* For Macs this should be in your applications folder. 
 +
 . Access the container (password: `vncpassword`).
 +
 * Via the VNC application: 127.0.0.1:5901
 
 * Via the web: http://127.0.0.1:6901/vnc.html
+
+
+== Resources and Troubleshooting
+=== Docker
+
+For help with any Docker command, execute the command in question followed by the `--help` option. For example:
+```s
+$ docker run --help
+
+Usage: docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+Run a command in a new container
+
+Options:
+      --add-host value             Add a custom host-to-IP mapping (host:ip) (default [])
+  -a, --attach value               Attach to STDIN, STDOUT or STDERR (default [])
+...
+```
+
+****
+[TIP]
+.Docker Resources
+====
+* For in-depth descriptions and examples, access the https://docs.docker.com/reference/[ Docker Refrence Documentaiton] page.
+* For practice, Aqua Container Security compiled a list of https://www.aquasec.com/wiki/display/containers/100+Best+Docker+Tutorials["The Best 100 Docker Tutorials"]. 
+====
+****
+
+---
+ 
+
+
+
+
 
 
