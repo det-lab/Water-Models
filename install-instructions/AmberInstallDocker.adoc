@@ -4,61 +4,27 @@
 :important-caption: pass:[<span style="font-size: em"> IMPORTANT ❗ </span]
 
 // document Title 
-= Containers: Accessing Molecular Dynamics Software on Your Mac
+= Containerization: A Simplified Approach for Accessing Computational Software on Your Mac
 :toc:
 Dylan Torres <dylan.l.torres@ucdenver.edu>
 
-== Research and Command-Line-Coding
+== Computational Software: The Good and the Bad
+The flow of water is mesmerizing. Since performing my first fluid dynamics simulation, everyday experiences such as a gust of wind or the trickling of a creek have taken on new meaning.  
 
-Conducting applied research in any of the physical sciences is an awesome opportunity - you get to be on the cutting edge of your field! 
+Whether you're intersested in engineering, biology, physics or chemistry, working with computational software has the potential to foster growth in areas where pure theory and math may fall short.  
 
-But before you can perform any insightful or meaningful work, you'll have to overcome the challenges of working with command-line interfaces. 
+The issue is that most computational software packages are developed for Linux, making them difficult to install - especially for those of us who lack experience with the the Unix shell.  Fortuantely, a process called containerization has made accessing computational software a whole lot easier.
 
-Much of the software required to perform computational analysis requires an insane amount of work just to install and run the program - especially if the software was written for a different operating sytem. 
+With the use of a containerization platform called Docker, I recently installed a molecular dynamics (MD) package called http://ambermd.org[Amber] on my Mac.  I'll show you how to do the same and hopefully you'll be conducting MD
+simulations at the no time!
 
-Fortuantely, developments such as Docker made such applications and software more accessible. By the end of this, you will learn how to install a molecular dynamics package called *Amber* on your *Mac* with the use of the *Docker infrastructure*. 
+TIP: If you have little to no experience using the Unix Shell, check out this http://swcarpentry.github.io/shell-novice/[tutorial].  
 
-TIP: If you have little to no experience using the Unix Shell, check out this http://swcarpentry.github.io/shell-novice/[tutorial].   
+== Docker Desktop for Mac
+Before we run any molecular dynamics simulations, we have to install Docker. The latest version is called *Docker Desktop*. Does your mac satisfy the system requirements?
 
-== Molecular Dynamics: Amber
-
-http://ambermd.org[Amber Moleclar Dynamics] package can perform 
-simulations at the http://ambermd.org/2012_wires.pdf[atomic level], on timescales from femtoseconds to milliseconds! Since its creation in the late 1970s, Amber has gone from using just two languages (Fortran and C) to using Python, Cuda and Pearl with over 850,000 lines of code.This growth forced developers to divide the package into two platforms with the current versions being: *AmberTools18* and *Amber18*.
-
-=== Download the Amber Package
-Download the following to an easily accesible location such as your desktop - we'll need them later!
-
-==== AmberTools18 (Open Source)
-Download http://ambermd.org/GetAmber.php#ambertools[AmberTools18]. The recommended download method is *Option 1: Getting the Source Code*. 
-Fill out the required fields to get the `AmberTools18.tar.bz2`. 
-// image
-
-==== Amber18 Source Code (License Required)
-After purchasing a license (or obtaining one from school/work) for http://ambermd.org/GetAmber.php#ambertools[Amber18], follow the `Amber18.tar.bz2` download instructions sent to you. 
-
-****
-[NOTE]
-.File Extensions
-====
-`.tar` files store multiple files in one and are primarily used to archive in Linux/Unix systems. 
-
-`.bz2` files are used to compress TAR files (and others) for quick and easy software distribution. 
-====
-****
-
-== Docker
-
-image::https://upload.wikimedia.org/wikipedia/commons/7/79/Docker_%28container_engine%29_logo.png[100]
-
-Docker uses a client-server architecture to ship, build and run appplications in _containers_. 
-
-=== Docker Desktop for Mac
-
-Before you can run Amber in a Docker container, you have to install the Docker software. It is recommended that you install *Docker Desktop*, the newest version of Docker. 
-
-****
-*Docker Desktop System Requirements for Mac*
-====
+=== System Requirements for Mac
+=====
 . Mac hardware must be a 2010 or new model. You can check to see if your machine is supported by entering the following input and receving the following output in the Terminal:
 +
 ```sh
@@ -67,39 +33,100 @@ kern.hv_support: 1
 ```
  . macOS Sierra 10.12 and new releases are supported (new versions recommended).
  . Must have at least 4 GB of RAM
- . VirtualBox software is *NOT* required to run Docker Desktop. However, if it is installed on your computer, the version must be LATER than version 4.3.30.
-====
-====
-NOTE: If your system does not satisfy these requirements, you can download https://docs.docker.com/toolbox/overview/[Docker Toolbox]. *Docker Toolbox* is an installer for older Mac and Windows systems that lacks the full capability of *Docker Desktop*. Successful installation of Amber  with Docker Toolbox cannot be guaranteed.
-====
-****
+ . If you have the virtual machine software, VirtualBox installed on your computer, it can get in the way of successfully installing  Docker. As long as it's later than version 4.3.30, it should be fine. If you don't have it, even better! 
 
-=== Install and Run Docker Desktop for Mac
-Follow these instrunctions to install and run Docker Desktop. 
+NOTE: If your system does not meet the requirements, it's possible that an older version of Docker called https://docs.docker.com/toolbox/overview/[Docker Toolbox] can be installed on your Mac. Keep in mind that the older version wasn't tested for these instructions. 
+=====
 
-. Download the https://download.docker.com/mac/stable/Docker.dmg[Docker dmg file].
-. Double-click `Docker.dmg` to open the installer, then drag the whale to the Applications folder.
-// insert image
-+
-****
+
+
+=== Install Docker Desktop for Mac
+=====
 [NOTE]
 .File Extensions
 ====
 `.dmg` files or, Apple Disk Image Files, are typically used to compress software installers. DMGs are "mounted" as drives and treated by the OS as if they are physical hard drives, making it easy to view their content and install. 
 ====
-****
-
-. Double-click Docker.app in the Applications folder to start Docker. (In the example below, the Applications folder is in “grid” view mode.)
-// insert image
+. Download https://download.docker.com/mac/stable/Docker.dmg[Docker Desktop].
+. Double-click `Docker.dmg` to open the installer, then drag the whale to the Applications folder.
+// IMAGE::EXAMPLE2
+. Double-click Docker.app in the Applications folder to start Docker. You can easily locate files on your computer using the spotlight search. 
++
 . Authorize `Docker.app` with your system password after Docker is launched.
++
+//6
+//7
+. A new windown will appear prompting you to create a DockerHub account. Create an account.  
++
+//8
+Notice the little whale icon in your task bar. As an application, Docker primarily runs in the  background, only accessible through the Terminal. Click on the icon when you want quit running Docker. 
+//9
 
+[IMPORTANT]
+.*System Preferences*
+Apple has mac OS set up so that unless applications aren't downloaded from the AppStore, you'll have to manually grant access. The following  window may appear:
+//IMAGE::3
 
-=== Getting Familiar with Docker
+. OPEN the system preferences. Click on the grid icon in the upper left corner of the window, and select the  Security and Privacy icon. Under the general tab, in the bottom left corner of the window, click the lock icon to make changes. 
+//4
++
+.Then click Open Anyway
+//5
++
+. (again) Another window will appear asking if you want to open an App not download form the AppStore.
++
+. Click open
+=====
 
+== Setting Up
+=====
+[NOTE]
+.File Extensions
 ====
-NOTE: You can always compare your version of Docker to the latest version by looking at https://docs.docker.com/docker-for-mac/release-notes/[Docker release notes]. 
+`.tar` files store multiple files in one and are primarily used to archive in Linux/Unix systems. 
+
+`.bz2` files are used to compress TAR files (and others) for quick and easy software distribution. 
 ====
-Now that Docker is up  and running, verify that your version of Docker is up to date. Enter the following command in the Terminal:
+. *Download Amber*
++
+====
+* *AmberTools18 (Open Source)*
+** Download http://ambermd.org/GetAmber.php#ambertools[AmberTools18]. The recommended download method is *Option 1: Getting the Source Code*. 
+Fill out the required fields to get the `AmberTools18.tar.bz2`. 
+// image
+* *Amber18 Source Code (License Required)*
+** After purchasing a license (or obtaining one from school/work) for http://ambermd.org/GetAmber.php#ambertools[Amber18], follow the `Amber18.tar.bz2` download instructions sent to you. 
+====
+. *Download VMD 1.9.3*
++
+====
+* Download https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.3[VMD-1.9.3] (linux-OpenGL Version]
+into the  `/AmberDocker` directory and rename it `vmd-1.9.3-tar.gz`.
+====
+. *Download Real VNC*
++
+====
+* Download https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.19.325-MacOSX-x86_64.dmg[VNC Viewer]. This will provide us with an https://en.wikipedia.org/wiki/Ubuntu[Ubuntu] graphical user interface (GUI) to interact with the container. 
+=====
+
+== Building Your Own Molecular Dynamics Container
+
+Now that everything is setup, lets a better idea of _what_ containers are, and _how_ they're useful by running your own container capable of running MD simulations with Amber. 
+
+=== What _are_ Containers and _How_ Are They Useful?
+
+==== Containers Are Neatly Packed Units of Software That Run The Linux Kernel
+
+THE PROBLEM:
+
+Many of the Computing Software Programs available today were developed for Linux-based operating systems (the Linux Kernel). Incompatabilities between the Linux Kernel and Apple's XNU kernel prevent Linux-based software from runnig on macOS. 
+======
+THE SOLUTION:
+
+Containers run Linux-based operating systems on your computer separate from macOS.  
+
+
+In the terminal,type: 
 ```sh
   $ docker --version
 ```
@@ -126,59 +153,36 @@ You should receive an output similar to this:
   Experimental:     false
 ```
 
-As mentioned, Docker uses *client-server* infrstructure.
+Docker uses a *client-server* infrstructure. You are the Client and the Server is called the *Docker Damien*. 
 
-The command `docker` allows you to call on the *docker client*. The Docker client docker client communicates with the *engine* of the Docker platform - also known as the *Docker damien*.   
+Notice both rows labeled `OS\Arch:`: 
 
-In multitasking computer operating systems a daemon runs as a background process rather than under direct control of an interactive user. 
+.`darwin/amd64`: ==
+Darwin is is an open-source operating system that forms a primary componeent of macOS. Both of these are layer on top of the XNU kernel. 
 
-Fun Fact: the word daemon comes from ancient Greek belief of a supernatural being that lives in the background with with no particular bias toward good or evil. 
+.`linux/amd64`:
+linux indicates that the system is built upon the Linux kernel. 
 
-=== The Docker Command Line
+Fun Fact: the word daemon comes from ancient Greek belief of a supernatural being that lives in the background with with no particular bias toward good or evil.
+======
 
+=== Computing Software Pakages are Massive
 ====
-NOTE: The required syntax for executing any Docker command is `docker [OPTIONS] COMMAND [ARG...]`.
+.THE PROBLEM: 
+
+CSPs have lots of dependencies and may require installed compilers.
+
+.THE SOLUTION:
+. The dependencies and compilers of an application aren't installed on your hard drive - they're packaged in the container which is hosted by the Docker Daemon. 
+. Containers keep the source code, dependencies and compilers of an application neatly packaged and modular. 
+. Running applications in containers doesn't slow down your computer (it uses the Daemon server to run applications). 
 ====
 
-Everytime you use Docker, you have to call on the Docker client. You can't run Docker without it! 
+As users, we rely on  built-in libraries called *dependencies*. These libraries are how we instruct the computer to perform simulations. But before any simulations take place, we have to *compile*  our code from a human readable format to a machine-readable format, also known as a *compiiled exectuable* .   
 
-****
-You'll mostly use the Docker client to:
-====
-. Build Images: `docker build`
-. Run Containers: `docker run`
-. Setup networking for containers
-. Manage disk volumes for the container   
-====
-****
 
-In the Terminal, run `docker` and you'll get a list 
-of available *commands*, *options* and descriptions on how to use them.  
+So, CSPs require *dependencies* and *compilers* to successfully run on a system. Higher capabilities of a CSP to perform various tasks typically means that larger sets of dependencies and compilers will be required. 
 
-```sh 
-$ docker
-Usage: docker [OPTIONS] COMMAND [ARG...]
-       docker [ --help | -v | --version ]
-
-A self-sufficient runtime for containers.
-
-Options:
-      --config string      Location of client config files (default "/root/.docker")
-  -D, --debug              Enable debug mode
-      --help               Print usage
-  -H, --host value         Daemon socket(s) to connect to (default [])
-  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
-      --tls                Use TLS; implied by --tlsverify
-      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
-      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
-      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
-      --tlsverify          Use TLS and verify the remote
-  -v, --version            Print version information and quit
-
-Commands:
-    attach    Attach to a running container
-    # […]
-```
 
 == Building Your Docker Image 
 
@@ -264,6 +268,83 @@ Once the image is built, we can search for it by the tag name.
 This process takes about an hour while the Docker client connects to the Docker Daemon to build our image. 
 
 
+= Before Running a Container, We Have to Build an Image
+
+
+
+
+By packaging source code, dependencies, and compilers in a *container*,  we use a network. This means that bulky CSPs just got a whole lot lighter.
+
+Just to give you an idea:
+ 
+// INSERT IMAGE::EXAMPLE1
+
+
+The way this works is by running a *Dockerfile*. A Dockerfile contains the instructions for *executable* files to be *compiled* within a container. 
+
+
+
+
+
+is an open-source platform that runs applications on a computer's operating system by packaging all the dependencies and executables of Amber in a  _container_, we can run molecular dynamics simulations without overloading the Mac OS. 
+
+
+
+
+=== Getting Familiar with Docker
+
+ 
+The command `docker` allows you to call on the *docker client*. The Docker client docker client communicates with the *engine* of the Docker platform - also known as the *Docker damien*.   
+
+In multitasking computer operating systems a daemon runs as a background process rather than under direct control of an interactive user. 
+=== The Docker Command Line
+
+====
+NOTE: The required syntax for executing any Docker command is `docker [OPTIONS] COMMAND [ARG...]`.
+====
+
+Everytime you use Docker, you have to call on the Docker client. You can't run Docker without it! 
+
+****
+You'll mostly use the Docker client to:
+====
+. Build Images: `docker build`
+. Run Containers: `docker run`
+. Setup networking for containers
+. Manage disk volumes for the container   
+====
+****
+
+In the Terminal, run `docker` and you'll get a list 
+of available *commands*, *options* and descriptions on how to use them.  
+
+```sh 
+$ docker
+Usage: docker [OPTIONS] COMMAND [ARG...]
+       docker [ --help | -v | --version ]
+
+A self-sufficient runtime for containers.
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+      --help               Print usage
+  -H, --host value         Daemon socket(s) to connect to (default [])
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Commands:
+    attach    Attach to a running container
+    # […]
+```
+
+
+
 
 == Running Your Docker Container
 
@@ -338,6 +419,9 @@ $ docker stop [CONTAINER ID]
 * Via the web: http://127.0.0.1:6901/vnc.html
 
 
+=
+
+
 == Resources and Troubleshooting
 === Docker
 
@@ -372,3 +456,10 @@ Options:
 
 
 
+== Molecular Dynamics: Amber
+
+Since its creation in the late 1970s, Amber has gone from using just two languages (Fortran and C) to using Python, Cuda and Pearl with over 850,000 lines of code.This growth forced developers to divide the package into two platforms with the current versions being: *AmberTools18* and *Amber18*.
+
+====
+NOTE: You can always compare your version of Docker to the latest version by looking at https://docs.docker.com/docker-for-mac/release-notes/[Docker release notes]. 
+====
