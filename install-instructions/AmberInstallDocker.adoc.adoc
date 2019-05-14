@@ -1,0 +1,252 @@
+// global variables for admonition icons 
+:tip-caption: pass:[<span style="font-size: em">TIP 💡</span]
+:note-caption: pass:[<span style="font-size: em">  NOTE ✏️ </span]
+:important-caption: pass:[<span style="font-size: em"> IMPORTANT ❗ </span]
+// attribute for displaying keyboard
+:experimental:
+
+
+// document Title 
+= Containerization: A Simplified Approach for Accessing Computational Software on Your Mac
+Dylan Torres <dylan.l.torres@ucdenver.edu>
+:toc:
+
+NOTE: All references made to `Terminal.app` indicate use of the Unix shell on macOS. If you're unfamilar with the shell, check out this http://swcarpentry.github.io/shell-novice/[tutorial].
+
+
+== Computational Software: The Good and the Bad
+****
+TIP: To easily access `Terminal.app`, press kbd:[{comandkey} + space] and type `terminal` in the Spotlight Search box. 
+****
+
+With the use of a containerization platform called Docker, I recently installed a molecular dynamics (MD) package called http://ambermd.org[Amber] on my Mac.  I'll show you how to do the same and hopefully you'll be conducting MD
+simulations at the no time!
+
+****
+IMPORTANT: Amber is comprised of two packages. The first package, called AmberTools, is open source. The second package, simply called Amber, requires a purchased license.
+****
+
+== Docker Desktop for Mac
+To run MD simulations in a container *Docker Desktop*, the latest version of Docker. The system requirements for Macs are listed below. 
+****
+[TIP]
+====
+You can verify that your Mac supports Docker Desktop by entering the following in `Terminal.app`: 
+```sh
+$ sysctl kern.hv_support
+```
+If supported, you should receive:
+```sh
+kern.hv_support: 1
+```
+====
+****
+
+=== System Requirements for Mac
+* *Hardware*:
+
+** 2010 models or later
+** RAM: 4 GB of RAM or more
+* *Operating System (macOS)*:
+** Sierra 10.12 or later (later versions recommended)
+* *Software*:
+** *IF* VIrtualBox *IS NOT* installed on your Mac:
+*** Your're good, there's no need to install it.
+** *IF* VirtualBox *IS* installed on your Mac:
+*** VirtualBOx 4.3.30 or later
+
+****
+[NOTE]
+.If Your Mac *IS NOT* supported:
+====
+An older version of Docker called https://docs.docker.com/toolbox/overview/[Docker Toolbox] *_might_* support your Mac. However, Docker Toolbox was not tested for these instructions. 
+****
+
+=== Installation Instructions: Docker Desktop
+
+****
+[NOTE]
+.File Extensions
+====
+`.dmg` files are specific to macOS. They're compressed versions of applications that are mounted as drives on your Mac, making their content easy to view and install. 
+====
+****
+
+. Download https://download.docker.com/mac/stable/Docker.dmg[Docker Desktop].
+. Double-click `Docker.dmg` to open the installer.
++
+. Drag the whale to the Applications folder.
++
+image::ddfm11.png[dmg]
++
+image::ddfm2.png[dragWhale]
++
+. Double-click Docker.app in the Applications folder to start Docker. You can easily locate files on your computer using the spotlight search. 
++
+. Authorize `Docker.app` with your system password after Docker is launched.
++
+image::ddfm6.png[systemPass]
++
+. A new window will appear prompting you to create a DockerHub account. Create an account.
++
+image::ddfm5.png[DockerHub] 
++
+Notice the little whale icon in your task bar. As an application, Docker primarily runs in the  background, only accessible through the Terminal. Click on the icon when you want quit running Docker. 
++
+image::ddfm4.png[whale]
+
+****
+[IMPORTANT]
+.*System Preferences*
+====
+. Apple has mac OS set up so that unless applications aren't downloaded from the AppStore, you'll have to manually grant access. The following  window may appear:
+. OPEN the system preferences. Click on the grid icon in the upper left corner of the window, and select the  Security and Privacy icon. Under the general tab, in the bottom left corner of the window, click the lock icon to make changes. 
+. (again) Another window will appear asking if you want to open an App not download form the AppStore.
+. Click open
+====
+****
+
+== Linux-Based Applications and System Incompatibilities
+
+=== Docker *BUILD*
+
+
+=== Setting Up to Build Your Image
+
+****
+[NOTE]
+.File Extensions
+====
+`.tar` files store multiple files in one and are primarily used to archive in Linux/Unix systems. 
+
+`.bz2` files are used to compress TAR files (and others) for quick and easy software distribution. 
+====
+****
+
+. *Download Amber*
+* *AmberTools18 (Open Source)*
+** Download http://ambermd.org/GetAmber.php#ambertools[AmberTools18]. The recommended download method is *Option 1: Getting the Source Code*. 
+Fill out the required fields to get the `AmberTools18.tar.bz2`. 
+* *Amber18 Source Code (License Required)*
+** After purchasing a license (or obtaining one from school/work) for http://ambermd.org/GetAmber.php#ambertools[Amber18], follow the `Amber18.tar.bz2` download instructions sent to you. 
+. *Download VMD 1.9.3*
+* Download https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.3[VMD-1.9.3] (linux-OpenGL Version]
+into the  `/AmberDocker` directory and rename it `vmd-1.9.3-tar.gz`.
+. *Download Real VNC*
+* Download https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.19.325-MacOSX-x86_64.dmg[VNC Viewer]. This will provide us with an https://en.wikipedia.org/wiki/Ubuntu[Ubuntu] graphical user interface (GUI) to interact with the container. 
+
+== Your Very Own MD Simulator
+Now that everything is setup, lets a better idea of _what_ containers are, and _how_ they're useful by running your own container capable of running MD simulations with Amber. 
+
+==== Lightweight Packages With Compilers and Dependencies
+
+.THE PROBLEM: 
+
+CSPs have lots of dependencies and may require installed compilers.
+
+.THE SOLUTION:
+. The dependencies and compilers of an application aren't installed on your hard drive - they're packaged in the container which is hosted by the Docker Daemon. 
+. Containers keep the source code, dependencies and compilers of an application neatly packaged and modular. 
+. Running applications in containers doesn't slow down your computer (it uses the Daemon server to run applications). 
+
+
+As users, we rely on  built-in libraries called *dependencies*. These libraries are how we instruct the computer to perform simulations. But before any simulations take place, we have to *compile*  our code from a human readable format to a machine-readable format, also known as a *compiiled exectuable* .   
+
+So, CSPs require *dependencies* and *compilers* to successfully run on a system. Higher capabilities of a CSP to perform various tasks typically means that larger sets of dependencies and compilers will be required. 
+
+==== Before Running a Container, We Have to Build an Image
+
+By packaging source code, dependencies, and compilers in a *container*,  we use a network. This means that bulky CSPs just got a whole lot lighter.
+
+Just to give you an idea:
+ 
+// INSERT IMAGE::EXAMPLE1
+
+The way this works is by running a *Dockerfile*. A Dockerfile contains the instructions for *executable* files to be *compiled* within a container. 
+
+is an open-source platform that runs applications on a computer's operating system by packaging all the dependencies and executables of Amber in a  _container_, we can run molecular dynamics simulations without overloading the Mac OS. 
+
+== Buid Your Docker Image 
+
+A Docker *container image* (simply referred to as an _image_) is a lightweight, standalone, executable package of sotware that includes everything needed to run an application: code, runtime, system tools, system libraries and settings. 
+
+First, we need to download the necessary files to build the  image:
+
+```sh
+$ git clone https://github.com/yylonly/AmberDocker.git
+```
+
+Now, use `ls` to list the files in your current directory. You should find a new directory named `AmberDocker`. Change to that directory with `cd`.
+
+```sh 
+$ ls
+AmberDocker
+$ cd AmberDocker
+AmberDocker $
+```
+
+Another `ls` will reveal several files:
+```sh
+$ ls
+README.md	 Dockerfile		src     	
+```
+
+****
+[NOTE]
+.File Extensions
+====
+The file `README.md` contains instructions for you, the user on how to ensure the image is properly built. `.md` indicates it was written using a text editor called MarkDown. 
+
+
+The `Dockerfile` contains the instructions for the Docker daemon to build the image. 
+
+`src` is a type of directory used in Unix OS that contain source code. 
+====
+****
+
+Now, let's open up that `README.md` file:
+
+```sh
+$ open README.md
+****
+
+****
+NOTE: You'll need a text editor to view a `.md` file. You can also view it https://github.com/yylonly/AmberDocker/blob/master/README.md[here]. However, as you become more experienced, you'll benefit from having a text editor like https://code.visualstudio.comhttps://code.visualstudio.com[Visual Studio Code].
+****
+
+After opening `README.md`, you can see that we already have most of what we need to build our image. All that's left is to download https://www.ks.uiuc.edu/Research/vmd/vmd-1.9.3/[VMD-1.9.3(linux-OpenGL Version)].
+
+After downloading, rename the file to `vmd-1.9.3.tar.gz`.
+
+Okay, now move the following files to the AmberDocker directory:
+
+* `AmberTools18.tar.bz2`
+* `Amber18.tar.bz2` 
+* `vmd-1.9.3.tar.gz`
+
+into the  `/AmberDocker` directory and rename it `vmd-1.9.3-tar.gz`.
+
+FINALLY, it's time to *build the image*! In the AmberDocker directory:
+
+```sh
+$ docker build . -t amber18:cpu
+```
+
+****
+[NOTE]
+.Docker Build Command: Build an Image
+====
+
+```sh
+docker build [OPTIONS] PATH | URL | -
+```
+we used `.`  as the `[PATH]` to build the image in the current `/AmberDocker` directory
+
+`-t` or `--tag list` is an `[OPTION]` that we used to name the container `amber18:cpu`
+
+====
+****
+
+Once the image is built, we can search for it by the tag name. 
+
+This process takes about an hour while the Docker client connects to the Docker Daemon to build our image. 

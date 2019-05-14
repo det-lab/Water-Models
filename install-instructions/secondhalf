@@ -1,0 +1,215 @@
+=== Software Dependencies and Compiled Executables
+
+THE PROBLEM:
+
+Many of the Computing Software Programs available today were developed for Linux-based operating systems (the Linux Kernel). Incompatabilities between the Linux Kernel and Apple's XNU kernel prevent Linux-based software from runnig on macOS. 
+
+
+THE SOLUTION:
+
+Containers run Linux-based operating systems on your computer separate from macOS.  
+
+
+In the terminal,type: 
+```sh
+  $ docker --version
+```
+You should receive an output similar to this: 
+
+```sh
+  Client: Docker Engine - Community
+   Version:           18.09.2
+   API version:       1.39
+   Go version:        go1.10.8
+   Git commit:        6247962
+   Built:             Sun Feb 10 04:12:39 2019
+   OS/Arch:           darwin/amd64
+   Experimental:      false
+
+ Server: Docker Engine - Community
+  Engine:
+  Version:          18.09.2
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.6
+  Git commit:       6247962
+  Built:            Sun Feb 10 04:13:06 2019
+  OS/Arch:          linux/amd64
+  Experimental:     false
+```
+
+Docker uses a *client-server* infrstructure. You are the Client and the Server is called the *Docker Damien*. 
+
+Notice both rows labeled `OS\Arch:`: 
+
+.`darwin/amd64`: 
+Darwin is is an open-source operating system that forms a primary componeent of macOS. Both of these are layer on top of the XNU kernel. 
+
+.`linux/amd64`:
+linux indicates that the system is built upon the Linux kernel. 
+
+Fun Fact: the word daemon comes from ancient Greek belief of a supernatural being that lives in the background with with no particular bias toward good or evil.
+
+
+=== Docker *RUN* 
+
+A Docker *container* runs an application by packaging all the code and dependencies packaged up neatly so the application runs quickly and reliably. 
+
+It doesn't matter that Amber wasn't written specifically for macOS because the way we have things set up, Amber will run using an operating system within the container! This works by tapping into the network hosted by the Docker daemon.
+
+==== Docker Images Become Containers
+To run our image in a countainer, we need to use the `docker run` command. But first, let's check out that `README.md` document again.
+
+According to the instructions, we need to download and install an application called https://www.realvnc.com/download/file/viewer.files/VNC-Viewer-6.19.325-MacOSX-x86_64.dmg[VNC Viewer]. This will provide us with an https://en.wikipedia.org/wiki/Ubuntu[Ubuntu] graphical user interface (GUI) to interact with the container. 
+
+The time has finally come.... let's run our container! In the `/AmberDocker` directory:
+```sh
+$ docker run --rm -p 5901:5901 -p 6901:6901 -v $(pwd):/data --user 0 amber18:cpu
+```
+
+
+****
+[NOTE]
+.Docker Run Command: Run an Image in a Container
+====
+```sh
+docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+```
+
+`-rm` Automatically removes the container after it is exited. 
+
+`-p` Pubishes all ports to random ports
+
+`-v` Mounts volumes from the specified container
+
+`--user` User namespace to use
+====
+****
+
+
+Open a new terminal window and enter the `ps` (process status) command. This shows containers that are currently running:
+
+```sh
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                NAMES
+c2598f1332ab        amber18:cpu         "/dockerstartup/vnc_…"   10 seconds ago      Up 8 seconds        5901/tcp, 6901/tcp   eloquent_nobel
+```
+
+notice the output:
+
+`CONTAINER ID`: an alphanumeric sequence assigned to the container
+
+`IMAGE`: the tag we assigned to the image
+
+This is great, to run the container from now on, all we have to type is:
+
+```sh
+$ docker run amber18:cpu
+```
+
+To stop the container:
+```sh
+$ docker stop [CONTAINER ID]
+```
+
+==== Connect to the Container
+
+. Open the VNC viewer.
++ 
++
+. Access the container (password: `vncpassword`).
++
+* Via the VNC application: 127.0.0.1:5901
+
+* Via the web: http://127.0.0.1:6901/vnc.html
+
+
+= Extras
+
+== Getting Familiar with Docker
+
+ 
+The command `docker` allows you to call on the *docker client*. The Docker client docker client communicates with the *engine* of the Docker platform - also known as the *Docker damien*.   
+
+In multitasking computer operating systems a daemon runs as a background process rather than under direct control of an interactive user. 
+
+==== The Docker Command Line
+
+====
+NOTE: The required syntax for executing any Docker command is `docker [OPTIONS] COMMAND [ARG...]`.
+====
+
+Everytime you use Docker, you have to call on the Docker client. You can't run Docker without it! 
+
+****
+You'll mostly use the Docker client to:
+====
+. Build Images: `docker build`
+. Run Containers: `docker run`
+. Setup networking for containers
+. Manage disk volumes for the container   
+====
+****
+
+In the Terminal, run `docker` and you'll get a list 
+of available *commands*, *options* and descriptions on how to use them.  
+
+```sh 
+$ docker
+Usage: docker [OPTIONS] COMMAND [ARG...]
+       docker [ --help | -v | --version ]
+
+A self-sufficient runtime for containers.
+
+Options:
+      --config string      Location of client config files (default "/root/.docker")
+  -D, --debug              Enable debug mode
+      --help               Print usage
+  -H, --host value         Daemon socket(s) to connect to (default [])
+  -l, --log-level string   Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
+      --tls                Use TLS; implied by --tlsverify
+      --tlscacert string   Trust certs signed only by this CA (default "/root/.docker/ca.pem")
+      --tlscert string     Path to TLS certificate file (default "/root/.docker/cert.pem")
+      --tlskey string      Path to TLS key file (default "/root/.docker/key.pem")
+      --tlsverify          Use TLS and verify the remote
+  -v, --version            Print version information and quit
+
+Commands:
+    attach    Attach to a running container
+    # […]
+```
+
+=== Resources and Troubleshooting
+
+=== Docker
+
+For help with any Docker command, execute the command in question followed by the `--help` option. For example:
+```s
+$ docker run --help
+
+Usage: docker run [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+Run a command in a new container
+
+Options:
+      --add-host value             Add a custom host-to-IP mapping (host:ip) (default [])
+  -a, --attach value               Attach to STDIN, STDOUT or STDERR (default [])
+...
+```
+
+****
+[TIP]
+.Docker Resources
+====
+* For in-depth descriptions and examples, access the https://docs.docker.com/reference/[ Docker Refrence Documentaiton] page.
+* For practice, Aqua Container Security compiled a list of https://www.aquasec.com/wiki/display/containers/100+Best+Docker+Tutorials["The Best 100 Docker Tutorials"]. 
+====
+****
+
+---
+ 
+== Molecular Dynamics: Amber
+
+Since its creation in the late 1970s, Amber has gone from using just two languages (Fortran and C) to using Python, Cuda and Pearl with over 850,000 lines of code.This growth forced developers to divide the package into two platforms with the current versions being: *AmberTools18* and *Amber18*.
+
+
+NOTE: You can always compare your version of Docker to the latest version by looking at https://docs.docker.com/docker-for-mac/release-notes/[Docker release notes]. 
+
