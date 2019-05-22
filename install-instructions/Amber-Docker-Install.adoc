@@ -5,7 +5,7 @@
 
 
 // document Title 
-= Containerization: Run Amber Molecular Dynamics Simulations On Your Mac 
+= Containerization: A Simplified Approach for Accessing Amber Molecular Dynamics Software on Your Mac
 Dylan Torres <dylan.l.torres@ucdenver.edu>
 //table of contents
 :toc:
@@ -15,13 +15,16 @@ Dylan Torres <dylan.l.torres@ucdenver.edu>
 
 NOTE: All references made to `Terminal.app` indicate the use of the native Unix shell on macOS. If you're unfamilar with the shell, check out this http://swcarpentry.github.io/shell-novice/[tutorial].
 
-== The Challenges of Computational Software Packages: Heavy Loads and Incompatibilites
+== The Challenges of Computational Software Packages
 
-Computational Software Packages (CSPs) have revolutionized the way we do science. CSPs are typically more efficient, more economical and safer when compared with traditional methods of experimentation. With such benefits, it seems that the utiilization of CSPs would be an integral component of any science-based education. 
+Computation has revolutionized how researchers do science. Compared to tranditional methods, computation offers improvements in safety, efficiency, and cost. However, for the vast majority of curious minds, computational software packages (CSPs) have a major downfall - they are difficult to access. The challenge to access CSPs can be characterized by two factors: they lack portability and they are resource intensive. 
 
-However, accessing CSPs can be a challenge. A great deal of CSPs are developed for the https://en.wikipedia.org/wiki/Linux_kernel[Linux kernel] and depending on the CSP, certain compilers and dependencies must be installed - all of which is performed in the shell. If installing a CSP doesn't seem difficult enough, _running_ a Linux-based CSP on a different operating system presents another set of challenges due to https://en.wikipedia.org/wiki/Software_incompatibility[system incompatibilities]. 
+At the core of every computer's operating system is the https://en.wikipedia.org/wiki/Kernel_(operating_system)[kernel]. macOS utlizes the XNU (Darwin) kernel and Windows utilizes the NT kernel. Despite the popularity of the previously mentioned operating systems, many CSPs are developed for the https://en.wikipedia.org/wiki/Linux_kernel[Linux kernel]. Attempting to install or run Linux-based applications on macOS or Windows can result in failure due to https://en.wikipedia.org/wiki/Software_incompatibility[system incompatibilities]. Hence, CSPs lack portability. 
 
-Fortunately, a solution to these challenges exists: https://www.docker.com/resources/what-container[containers]. Continue reading if you would like to learn how I installed a molecular dynamics (MD) package called http://ambermd.org[Amber] on my Mac with the use of a containerization platform called https://docs.docker.com/install/[Docker]. 
+All applications and software must have a proper environement to install and run in. This inludes source code, libraries and other applications - all of which are called http://rcardin.github.io/programming/oop/software-engineering/2017/04/10/dependency-dot.html[dependencies]. Additionally, all applications and software have to communicate with the kernel to execute specific tasks  as instructed by the user. This is where https://en.wikipedia.org/wiki/Compiler[compilers] come in. CSPs have lots of dependencies and can require several compilers - which summed together are resource intensive, compromsing a computer's speed and performance. 
+
+Fortunately, these challenges can be simplified by running a CSP in a https://www.docker.com/resources/what-container[container]. 
+The following text contains instructions on how to install and run a Linux-based, molecular dynamics (MD) package called http://ambermd.org[Amber] on your Mac. We will utilize a containerization platform known as https://docs.docker.com/install/[Docker] to accomplish this.
 ****
 IMPORTANT: Amber is currently comprised of two packages: AmberTools18 and Amber18. AmberTools18 is free but Amber18 requires a purchased license.
 ****
